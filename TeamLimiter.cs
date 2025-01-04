@@ -15,19 +15,19 @@ public class TeamLimiterConfig: BasePluginConfig
 public class TeamLimiter: BasePlugin, IPluginConfig<TeamLimiterConfig>
 {
 	public override string ModuleName => "TeamLimiter";
-    public override string ModuleAuthor => "Ferks-FK";
-    public override string ModuleVersion => "0.0.1";
+	public override string ModuleAuthor => "Ferks-FK";
+	public override string ModuleVersion => "0.0.1";
 	public TeamLimiterConfig Config { get; set; } = new();
 	public void OnConfigParsed(TeamLimiterConfig config)
 	{
 		Config = config;
 	}
-    public override void Load(bool hotReload)
-    {
-        RegisterEventHandler<EventPlayerTeam>(OnPlayerTeamChange);
+	public override void Load(bool hotReload)
+	{
+		RegisterEventHandler<EventPlayerTeam>(OnPlayerTeamChange);
 		AddCommandListener("jointeam", JoinTeamListener);
-    }
-    public HookResult OnPlayerTeamChange(EventPlayerTeam @event, GameEventInfo info)
+	}
+	public HookResult OnPlayerTeamChange(EventPlayerTeam @event, GameEventInfo info)
 	{
 		var player = @event.Userid;
 
@@ -46,42 +46,42 @@ public class TeamLimiter: BasePlugin, IPluginConfig<TeamLimiterConfig>
 
 		return HookResult.Continue;
 	}
-    public HookResult JoinTeamListener(CCSPlayerController? player, CommandInfo info)
-    {
-        if (player is null || !player.IsValid)
-            return HookResult.Continue;
+	public HookResult JoinTeamListener(CCSPlayerController? player, CommandInfo info)
+	{
+		if (player is null || !player.IsValid)
+			return HookResult.Continue;
 
-        var Team = GetTeamById(info.ArgByIndex(1));
+		var Team = GetTeamById(info.ArgByIndex(1));
 
-        if (Team == CsTeam.Spectator)
+		if (Team == CsTeam.Spectator)
 		{
 			return HookResult.Continue;
 		}
 
-        if (Team == CsTeam.None && IsTwoTeamsFull()) {
+		if (Team == CsTeam.None && IsTwoTeamsFull()) {
 			player.ExecuteClientCommand("play sounds/ui/weapon_cant_buy.vsnd_c");
 
 			return HookResult.Stop;
 		}
 
-        if ((Team == CsTeam.Terrorist && IsTeamFull(CsTeam.Terrorist)) || (Team == CsTeam.CounterTerrorist && IsTeamFull(CsTeam.CounterTerrorist)))
-        {
-            player.ExecuteClientCommand("play sounds/ui/weapon_cant_buy.vsnd_c");
+		if ((Team == CsTeam.Terrorist && IsTeamFull(CsTeam.Terrorist)) || (Team == CsTeam.CounterTerrorist && IsTeamFull(CsTeam.CounterTerrorist)))
+		{
+			player.ExecuteClientCommand("play sounds/ui/weapon_cant_buy.vsnd_c");
 
-            return HookResult.Stop;
-        }
+			return HookResult.Stop;
+		}
 
-        return HookResult.Continue;
-    }
-    private bool IsTwoTeamsFull()
+		return HookResult.Continue;
+	}
+	private bool IsTwoTeamsFull()
 	{
 		return IsTeamFull(CsTeam.Terrorist) && IsTeamFull(CsTeam.CounterTerrorist);
 	}
-    private bool IsTeamFull(CsTeam team)
+	private bool IsTeamFull(CsTeam team)
 	{
 		return Utilities.GetPlayers().Count(player => player.IsValid && !player.IsBot && !player.IsHLTV && player.Team == team) >= Config.MaxPlayersPerTeam;
 	}
-    private static CsTeam GetTeamById(string teamId)
+	private static CsTeam GetTeamById(string teamId)
 	{
 		switch (teamId)
 		{
