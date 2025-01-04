@@ -39,7 +39,6 @@ public class TeamLimiter: BasePlugin, IPluginConfig<TeamLimiterConfig>
 			info.DontBroadcast = true;
 			
 			Server.NextFrame(() => {
-				player.RemoveWeapons();
 				player.ChangeTeam(CsTeam.Spectator);
 			});
 		}
