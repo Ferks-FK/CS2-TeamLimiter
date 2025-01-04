@@ -5,7 +5,7 @@ Useful for PUG/MIX or Retake mode servers.
 
 ---
 
-## Installtion
+## Installion
 
 - Install [CounterStrike Sharp](https://github.com/roflmuffin/CounterStrikeSharp) & [Metamod:Source](https://www.sourcemm.net/downloads.php/?branch=master)
 - Download the latest version of the plugin by clicking on `Code` and `Download ZIP`.
